@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,4 +22,8 @@ public class Cliente {
     private String cedula;
     @Column
     private String telefono;
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Direccion> direcciones;
+
 }
