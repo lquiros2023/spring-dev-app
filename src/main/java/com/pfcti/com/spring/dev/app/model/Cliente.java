@@ -22,8 +22,8 @@ public class Cliente {
     private String cedula;
     @Column
     private String telefono;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Direccion> direcciones;
 
 }
