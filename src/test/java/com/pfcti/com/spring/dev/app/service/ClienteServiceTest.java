@@ -59,12 +59,47 @@ class ClienteServiceTest {
 
     @Test
     void obtenerClientes() {
-        clienteService.obtenerClientes().stream().map(
-                cliente -> {
-                    System.out.println(">>>>> Cliente : " + cliente.getApellidos());
-                    return cliente;
-                }
-        ).collect(Collectors.toList());
+        List<ClienteDto> clienteDtos = clienteService.obtenerClientes();
+        clienteDtos.forEach(cliente -> System.out.println("Cliente: " + cliente.getApellidos()));
+        assertEquals(2, clienteDtos.size());
+    }
+
+    @Test
+    void obtenerClientesPorCodigoISOPaisYCuentasActivas() {
+        List<ClienteDto> clienteDtos = clienteService.obtenerClientesPorCodigoISOPaisYCuentasActivas("CR");
+        clienteDtos.forEach(clienteDto -> {System.out.println("Cliente: " +clienteDto.getApellidos());});
+        assertEquals(1, clienteDtos.size());
+    }
+
+    @Test
+    void eliminarCliente() {
+        clienteService.eliminarCliente(1);
         assertEquals(1,1);
+    }
+
+    @Test
+    void buscarPorApellidos() {
+        List<ClienteDto> clienteDtos = clienteService.buscarPorApellidos("SANCHEZ");
+        clienteDtos.forEach(clienteDto -> {System.out.println("client" +clienteDto.getApellidos());});
+        assertEquals(1,clienteDtos.size());
+    }
+
+    @Test
+    void buscarPorApellidosQueryNativo() {
+
+        List<ClienteDto> clienteDtos = clienteService.buscarPorApellidosQueryNativo("PEREZ");
+        clienteDtos.forEach(clienteDto -> {System.out.println("client" +clienteDto.getApellidos());});
+        assertEquals(1, clienteDtos.size());
+    }
+
+    @Test
+    void updateClienteByQuery() {
+        ClienteDto clienteDtoOriginal = clienteService.buscarPorApellidos("SANCHEZ").get(0);
+        System.out.println("Nombre original: " + clienteDtoOriginal.getNombre());
+        clienteService.updateClienteByQuery("CAMBIADO EL NOMBRE", "SANCHEZ");
+
+        ClienteDto clienteDtoCambiado = clienteService.buscarPorApellidos("SANCHEZ").get(0);
+        System.out.println("NOMBRE CAMBIADO: " + clienteDtoCambiado.getNombre());
+        assertNotEquals(clienteDtoOriginal.getNombre(), clienteDtoCambiado.getNombre());
     }
 }
