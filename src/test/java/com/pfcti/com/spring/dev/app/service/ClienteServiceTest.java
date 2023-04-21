@@ -102,4 +102,31 @@ class ClienteServiceTest {
         System.out.println("NOMBRE CAMBIADO: " + clienteDtoCambiado.getNombre());
         assertNotEquals(clienteDtoOriginal.getNombre(), clienteDtoCambiado.getNombre());
     }
+
+    @Test
+    void findByApellidosAndAndNombre() {
+        List<ClienteDto> clienteDtos = clienteService.findByApellidosAndAndNombre("SANCHEZ","RAUL");
+                assertFalse(clienteDtos.isEmpty());
+                System.out.println("Cliente encontrado:" + clienteDtos.get(0).getApellidos());
+                assertEquals("SANCHEZ", clienteDtos.get(0).getApellidos());
+
+    }
+
+    @Test
+    void findClientesByPaisAndCuentas_EstadoIsTrue() {
+
+        List<ClienteDto> clienteDtos = clienteService.findByApellidosAndAndNombre("SANCHEZ","RAUL");
+        assertFalse(clienteDtos.isEmpty());
+        System.out.println("Cliente encontrado:" + clienteDtos.get(0).getApellidos());
+        assertEquals("SANCHEZ", clienteDtos.get(0).getApellidos());
+
+    }
+
+    @Test
+    void findClientesByPaisAndTarjetas_EstadoIsTrue() {
+        List<ClienteDto> clienteDtos = clienteService.findClientesByPaisAndTarjetas_EstadoIsTrue("EC");
+        assertFalse(clienteDtos.isEmpty());
+        System.out.println("Cliente encontrado:" + clienteDtos.get(0).getApellidos());
+        assertEquals("SANCHEZ", clienteDtos.get(0).getApellidos());
+    }
 }

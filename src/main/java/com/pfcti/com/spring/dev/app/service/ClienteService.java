@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -125,6 +126,22 @@ public class ClienteService {
     public void updateClienteByQuery(String nombre, String apellidos){
         clienteRepository.updateClienteByQuery(nombre,apellidos);
     }
+    public List<ClienteDto> findByApellidosAndAndNombre(String apellidos, String nombre)
+    {
+        return clienteRepository
+                .findByApellidosAndAndNombre(apellidos,nombre)
+                .stream()
+                .map(this::fromClienteToClienteDto)
+                .collect(Collectors.toList());
+    }
 
+
+    public  List<ClienteDto> findClientesByPaisAndTarjetas_EstadoIsTrue(String pais){
+        return clienteRepository
+                .findClientesByPaisAndTarjetas_EstadoIsTrue(pais)
+                .stream()
+                .map(this::fromClienteToClienteDto)
+                .collect(Collectors.toList());
+    }
 
 }
