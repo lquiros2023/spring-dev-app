@@ -129,4 +129,29 @@ class ClienteServiceTest {
         System.out.println("Cliente encontrado:" + clienteDtos.get(0).getApellidos());
         assertEquals("SANCHEZ", clienteDtos.get(0).getApellidos());
     }
+
+    @Test
+    void busquedaDinamicaPorCriterios() {
+
+        List<ClienteDto> clienteDtos = clienteService.busquedaDinamicaPorCriterios(new ClienteDto());
+        assertFalse(clienteDtos.isEmpty());
+        clienteDtos.forEach(clienteDto -> {System.out.println("cliente:" + clienteDto.getApellidos());});
+        assertTrue(clienteDtos.size() >=2);
+
+        ClienteDto clienteDto = new ClienteDto();
+        clienteDto.setApellidos("SANCHEZ");
+        clienteDtos = clienteService.busquedaDinamicaPorCriterios(clienteDto);
+        clienteDtos.forEach(clienteDto2 -> {System.out.println("Cliente" + clienteDto2.getApellidos());});
+        assertTrue(clienteDtos.size() == 4);
+
+
+        clienteDto = new ClienteDto();
+        clienteDto.setApellidos("SANCHEZ");
+        clienteDto.setNombre("HORACIO");
+        clienteDtos = clienteService.busquedaDinamicaPorCriterios(clienteDto);
+        clienteDtos.forEach((clienteDto4 -> {System.out.println("Cliente: " + clienteDto4.getApellidos());}));
+        assertTrue(clienteDtos.size() == 1);
+
+
+    }
 }
