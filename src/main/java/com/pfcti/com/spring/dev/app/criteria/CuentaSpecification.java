@@ -15,7 +15,7 @@ public class CuentaSpecification {
     public <T> Specification<T> isTrue(String fieldName, Boolean fieldValue) {
         return fieldValue == null ? null :
                 (root, query, criteriaBuilder)
-                        -> criteriaBuilder.isTrue(root.get(fieldName));
+                        -> criteriaBuilder.equal(root.get(fieldName), fieldValue );
     }
 
     public static <T> Specification<T> like(String fieldName, String fieldValue) {
@@ -31,6 +31,14 @@ public class CuentaSpecification {
 
     private Specification<Cuenta> estadoCriteria(CuentaDto cuentaDto) {
         return isTrue("estado", cuentaDto.getEstado());
+    }
+
+    private Specification<Cuenta> tipoCriteria(CuentaDto cuentaDto) {
+        return like("tipo", cuentaDto.getTipo());
+    }
+
+    private Specification<Cuenta> numeroCriteria(CuentaDto cuentaDto) {
+        return like("numero", cuentaDto.getNumero());
     }
 
 
