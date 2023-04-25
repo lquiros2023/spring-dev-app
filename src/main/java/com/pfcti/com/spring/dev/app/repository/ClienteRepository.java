@@ -15,7 +15,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer>, JpaS
   @Query(value = "select c from Cliente c where c.apellidos=:apellidos")
   List<Cliente> buscarPorApellidos(String apellidos);
 
-  List<Cliente> findClientesByApellidos(String apellidos);
   @Query(value = "select nombre, apellidos, cedula, telefono, id from TCLIENTE where apellidos=:apellidos", nativeQuery = true)
   List<Tuple> buscarPorApellidosQueryNativo(String apellidos);
 
@@ -27,6 +26,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer>, JpaS
 
   List<Cliente> findClientesByPaisAndTarjetas_EstadoIsTrue(String pais);
 
+  List<Cliente> findClientesByCedula(String cedula);
 
-
+  List<Cliente> findClientesByNombreContainingIgnoreCaseOrApellidosContainingIgnoreCase(String nombre, String apellidos);
 }
