@@ -31,6 +31,7 @@ public class ClienteService {
         cliente.setNombre(clienteDto.getNombre());
         cliente.setApellidos(clienteDto.getApellidos());
         cliente.setCedula(clienteDto.getCedula());
+        cliente.setPais(clienteDto.getPais());
         cliente.setTelefono(clienteDto.getTelefono());
         clienteRepository.save(cliente);
 
@@ -62,6 +63,7 @@ public class ClienteService {
         cliente.setApellidos(clienteDto.getApellidos());
         cliente.setCedula(clienteDto.getCedula());
         cliente.setTelefono(clienteDto.getTelefono());
+        cliente.setPais(clienteDto.getPais());
         clienteRepository.save(cliente);
     }
 
@@ -95,22 +97,23 @@ public class ClienteService {
         clienteDto.setTelefono(cliente.getTelefono());*/
 
     }
-  public void eliminarCliente(Integer clienteId){
+
+    public void eliminarCliente(Integer clienteId) {
         direccionRepository.deleteAllByCliente_Id(clienteId);
         cuentaRepository.deleteAllByCliente_Id(clienteId);
         clienteRepository.deleteById(clienteId);
         inversionRepository.deleteAllByCliente_Id(clienteId);
         tarjetaRepository.deleteAllByCliente_Id(clienteId);
-  }
+    }
 
-  public List<ClienteDto> buscarPorApellidos(String apellidos){
+    public List<ClienteDto> buscarPorApellidos(String apellidos) {
         List<ClienteDto> clienteDtos = new ArrayList<>();
         List<Cliente> clientes = clienteRepository.buscarPorApellidos(apellidos);
         clientes.forEach(cliente -> clienteDtos.add(fromClienteToClienteDto(cliente)));
         return clienteDtos;
-  }
+    }
 
-  public List<ClienteDto> buscarPorApellidosQueryNativo(String apellidos){
+    public List<ClienteDto> buscarPorApellidosQueryNativo(String apellidos) {
         List<ClienteDto> clienteDtos = new ArrayList<>();
         List<Tuple> tuples = clienteRepository.buscarPorApellidosQueryNativo(apellidos);
         tuples.forEach(tuple -> {
@@ -124,21 +127,22 @@ public class ClienteService {
 
         });
         return clienteDtos;
-  }
-    public void updateClienteByQuery(String nombre, String apellidos){
-        clienteRepository.updateClienteByQuery(nombre,apellidos);
     }
-    public List<ClienteDto> findByApellidosAndAndNombre(String apellidos, String nombre)
-    {
+
+    public void updateClienteByQuery(String nombre, String apellidos) {
+        clienteRepository.updateClienteByQuery(nombre, apellidos);
+    }
+
+    public List<ClienteDto> findByApellidosAndAndNombre(String apellidos, String nombre) {
         return clienteRepository
-                .findByApellidosAndAndNombre(apellidos,nombre)
+                .findByApellidosAndAndNombre(apellidos, nombre)
                 .stream()
                 .map(this::fromClienteToClienteDto)
                 .collect(Collectors.toList());
     }
 
 
-    public  List<ClienteDto> findClientesByPaisAndTarjetas_EstadoIsTrue(String pais){
+    public List<ClienteDto> findClientesByPaisAndTarjetas_EstadoIsTrue(String pais) {
         return clienteRepository
                 .findClientesByPaisAndTarjetas_EstadoIsTrue(pais)
                 .stream()
@@ -146,11 +150,26 @@ public class ClienteService {
                 .collect(Collectors.toList());
     }
 
-    public List<ClienteDto> busquedaDinamicaPorCriterios(ClienteDto clienteDtoFilter){
+    public List<ClienteDto> busquedaDinamicaPorCriterios(ClienteDto clienteDtoFilter) {
         return clienteRepository
                 .findAll(clienteSpecification.buildFilter(clienteDtoFilter))
                 .stream()
-        .map(this::fromClienteToClienteDto)
+                .map(this::fromClienteToClienteDto)
                 .collect(Collectors.toList());
+    }
+
+    public io.spring.guides.gs_producing_web_service.Cliente obtenerClienteSoap(int idCliente) {
+        Cliente cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> {
+                    throw new RuntimeException("Cliente No Existe");
+                });
+        io.spring.guides.gs_producing_web_service.Cliente clienteWs = new io.spring.guides.gs_producing_web_service.Cliente();
+        clienteWs.setId(cliente.getId());
+        clienteWs.setApellidos(cliente.getApellidos());
+        clienteWs.setNombre(cliente.getNombre());
+        clienteWs.setCedula(cliente.getCedula());
+        clienteWs.setTelefono(cliente.getTelefono());
+        clienteWs.setPais(cliente.getPais());
+        return clienteWs;
     }
 }
